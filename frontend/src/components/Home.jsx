@@ -3,46 +3,64 @@ import { Link } from 'react-router-dom';
 
 function Home() {
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/movies/');
-        if (!response.ok) {
-          throw new Error('Failed to fetch movies');
-        }
-        const data = await response.json();
-        setMovies(data);
-        setLoading(false);
-      } catch (err) {
-        setError('Error loading movies');
-        setLoading(false);
-        console.error(err);
-      }
-    };
-    fetchMovies();
+    // Fetch movies from backend
+    fetch('http://localhost:8000/api/movies/')
+      .then((response) => response.json())
+      .then((data) => setMovies(data))
+      .catch((error) => console.error('Error fetching movies:', error));
   }, []);
 
-  if (loading) return <div className="text-center p-4">Loading movies...</div>;
-  if (error) return <div className="text-center p-4 text-red-600">{error}</div>;
-
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Now Showing</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {movies.map(movie => (
-          <Link to={`/movie/${movie.id}`} key={movie.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src={movie.poster} alt={movie.title} className="w-full h-64 object-cover" />
-            <div className="p-4">
-              <h3 className="text-lg font-semibold">{movie.title}</h3>
-              <p className="text-gray-600">{movie.genre}</p>
-              <p className="text-gray-600">{movie.duration} minutes</p>
-            </div>
+    <div className="bg-gradient-to-b from-black to-gray-900 min-h-screen">
+      {/* Hero Section */}
+      <section
+        className="relative h-[80vh] bg-cover bg-center flex items-center justify-center"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')`,
+        }}
+      >
+        <div className="absolute inset-0 bg-black opacity-60"></div>
+        <div className="relative z-10 text-center">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 animate-fade-in">
+            Welcome to Eliana Cinema
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300 mb-8">
+            Experience the Magic of Movies
+          </p>
+          <Link
+            to="/movies"
+            className="bg-red-600 text-white px-6 py-3 rounded-full font-semibold text-lg hover:bg-red-700 transition duration-300"
+          >
+            Browse Movies
           </Link>
-        ))}
-      </div>
+        </div>
+      </section>
+
+      {/* Movies Section */}
+      <section className="container mx-auto p-6">
+        <h2 className="text-3xl font-bold text-white mb-6">Now Showing</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {movies.map((movie) => (
+            <Link
+              to={`/movie/${movie.id}`}
+              key={movie.id}
+              className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition duration-300"
+            >
+              <img
+                src={movie.poster_url || 'https://via.placeholder.com/300x450?text=Movie+Poster'}
+                alt={movie.title}
+                className="w-full h-96 object-cover group-hover:scale-105 transition duration-300"
+              />
+              <div className="p-4">
+                <h3 className="text-xl font-semibold text-white">{movie.title}</h3>
+                <p className="text-gray-400">{movie.genre}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

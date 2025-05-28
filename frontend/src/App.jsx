@@ -1,6 +1,5 @@
-import { Routes, Route, Link } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from './context/AuthContext';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Home from './components/Home';
 import MovieDetail from './components/MovieDetail';
 import Bookings from './components/Bookings';
@@ -24,7 +23,7 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="text-center p-4 text-red-600">
+        <div className="text-center p-4 text-red-500">
           Something went wrong: {this.state.error?.message || 'Unknown error'}.
         </div>
       );
@@ -34,41 +33,23 @@ class ErrorBoundary extends Component {
 }
 
 function App() {
-  const { user, logout } = useContext(AuthContext);
-
   return (
-    <>
-      <nav className="bg-gray-800 text-white p-4">
-        <ul className="flex space-x-4">
-          <li><Link to="/" className="hover:underline">Home</Link></li>
-          <li><Link to="/bookings" className="hover:underline">Bookings</Link></li>
-          {user ? (
-            <>
-              <li><Link to="/profile" className="hover:underline">Profile</Link></li>
-              <li>
-                <button onClick={logout} className="hover:underline">Logout</button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li><Link to="/login" className="hover:underline">Login</Link></li>
-              <li><Link to="/register" className="hover:underline">Register</Link></li>
-            </>
-          )}
-        </ul>
-      </nav>
-      <ErrorBoundary>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/movie/:id" element={<MovieDetail />} />
-          <Route path="/bookings" element={<Bookings />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Registration />} />
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/payment/confirm" element={<PaymentConfirmation />} />
-        </Routes>
-      </ErrorBoundary>
-    </>
+    <div className="bg-gradient-to-b from-black to-gray-900 min-h-screen">
+      <Navbar />
+      <div className="pt-20">
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/movie/:id" element={<MovieDetail />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Registration />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/payment/confirm" element={<PaymentConfirmation />} />
+          </Routes>
+        </ErrorBoundary>
+      </div>
+    </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Added Link
 import { AuthContext } from '../context/AuthContext';
 
 function Registration() {
@@ -50,61 +50,69 @@ function Registration() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Register</h2>
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-4">
-        <div className="mb-4">
-          <label className="block text-gray-700">Username:</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Phone:</label>
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            placeholder="+251..."
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-        >
-          Register
-        </button>
-        {error && <p className="text-red-600 mt-2">{error}</p>}
-      </form>
+    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 flex items-center justify-center">
+      <div className="w-full max-w-md bg-gray-800 rounded-lg shadow-xl p-8">
+        <h2 className="text-3xl font-bold text-white text-center mb-6">Join Eliana Cinema</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-gray-300 mb-2">Username</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-red-600 transition duration-300"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-gray-300 mb-2">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-red-600 transition duration-300"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-gray-300 mb-2">Phone</label>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-red-600 transition duration-300"
+              placeholder="+251..."
+            />
+          </div>
+          <div>
+            <label className="block text-gray-300 mb-2">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-red-600 transition duration-300"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full p-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition duration-300"
+          >
+            Register
+          </button>
+          {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+        </form>
+        <p className="text-gray-400 text-center mt-4">
+          Already have an account?{' '}
+          <Link to="/login" className="text-red-600 hover:underline">
+            Login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
