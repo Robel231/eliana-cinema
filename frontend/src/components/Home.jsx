@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import DroneShow from './DroneShow';
 
 function Home() {
   const [movies, setMovies] = useState([]);
@@ -21,6 +22,7 @@ function Home() {
           backgroundImage: `url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')`,
         }}
       >
+        <DroneShow />
         <div className="absolute inset-0 bg-black opacity-70"></div>
         <div className="relative z-10 text-center text-white p-4">
           <h1 className="text-5xl md:text-7xl font-extrabold mb-4 animate-fade-in drop-shadow-lg">
