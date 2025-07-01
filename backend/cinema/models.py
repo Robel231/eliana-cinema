@@ -14,6 +14,7 @@ class Movie(models.Model):
        duration = models.IntegerField()
        poster = models.URLField(max_length=500)
        release_date = models.DateField()
+       director = models.CharField(max_length=100, blank=True)
 
        def __str__(self):
            return self.title
@@ -21,6 +22,8 @@ class Movie(models.Model):
 class Theater(models.Model):
        name = models.CharField(max_length=100)
        capacity = models.IntegerField()
+       rows = models.IntegerField(default=10)
+       columns = models.IntegerField(default=15)
 
        def __str__(self):
            return self.name
@@ -41,10 +44,25 @@ class Booking(models.Model):
        seats = models.CharField(max_length=100)
        payment_status = models.CharField(
            max_length=20,
-           choices=[('PENDING', 'Pending'), ('COMPLETED', 'Completed'), ('FAILED', 'Failed')],
+           choices=[
+               ('PENDING', 'Pending'),
+               ('PENDING_APPROVAL', 'Pending Approval'),
+               ('COMPLETED', 'Completed'),
+               ('FAILED', 'Failed'),
+               ('REJECTED', 'Rejected'),
+           ],
            default='PENDING'
        )
        transaction_id = models.CharField(max_length=100, blank=True)
 
        def __str__(self):
            return f"Booking for {self.showtime} by {self.user.username}"
+
+class Payment(models.Model):
+       booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name='payment')
+       payment_proof = models.ImageField(upload_to='payment_proofs/')
+       uploaded_at = models.DateTimeField(auto_now_add=True)
+       is_approved = models.BooleanField(default=False)
+
+       def __str__(self):
+           return f"Payment for booking {self.booking.id}"

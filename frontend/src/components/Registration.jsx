@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Added Link
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 function Registration() {
@@ -21,7 +21,7 @@ function Registration() {
     e.preventDefault();
     setError('');
     try {
-      const response = await fetch('http://localhost:8000/api/register/', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/register/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -50,65 +50,69 @@ function Registration() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 flex items-center justify-center">
-      <div className="w-full max-w-md bg-gray-800 rounded-lg shadow-xl p-8">
-        <h2 className="text-3xl font-bold text-white text-center mb-6">Join Eliana Cinema</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="min-h-screen bg-dark-1 flex items-center justify-center py-12 px-4">
+      <div className="w-full max-w-md bg-dark-2 rounded-xl shadow-2xl p-8 space-y-6 border border-dark-3 animate-fade-in">
+        <h2 className="text-4xl font-bold text-center text-primary mb-6">Join Eliana Cinema</h2>
+        <form onSubmit={handleSubmit}>
           <div>
-            <label className="block text-gray-300 mb-2">Username</label>
+            <label className="block text-text-light text-lg font-medium mb-2" htmlFor="username">Username</label>
             <input
               type="text"
+              id="username"
               name="username"
               value={formData.username}
               onChange={handleChange}
-              className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-red-600 transition duration-300"
               required
+              className="w-full p-3 rounded-lg bg-dark-3 border border-dark-3 text-text-light placeholder-text-dark focus:ring-2 focus:ring-primary focus:border-transparent transition duration-300"
             />
           </div>
           <div>
-            <label className="block text-gray-300 mb-2">Email</label>
+            <label className="block text-text-light text-lg font-medium mb-2" htmlFor="email">Email</label>
             <input
               type="email"
+              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-red-600 transition duration-300"
               required
+              className="w-full p-3 rounded-lg bg-dark-3 border border-dark-3 text-text-light placeholder-text-dark focus:ring-2 focus:ring-primary focus:border-transparent transition duration-300"
             />
           </div>
           <div>
-            <label className="block text-gray-300 mb-2">Phone</label>
+            <label className="block text-text-light text-lg font-medium mb-2" htmlFor="phone">Phone</label>
             <input
               type="tel"
+              id="phone"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-red-600 transition duration-300"
+              className="w-full p-3 rounded-lg bg-dark-3 border border-dark-3 text-text-light placeholder-text-dark focus:ring-2 focus:ring-primary focus:border-transparent transition duration-300"
               placeholder="+251..."
             />
           </div>
           <div>
-            <label className="block text-gray-300 mb-2">Password</label>
+            <label className="block text-text-light text-lg font-medium mb-2" htmlFor="password">Password</label>
             <input
               type="password"
+              id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-red-600 transition duration-300"
               required
+              className="w-full p-3 rounded-lg bg-dark-3 border border-dark-3 text-text-light placeholder-text-dark focus:ring-2 focus:ring-primary focus:border-transparent transition duration-300"
             />
           </div>
+          {error && <p className="text-red-500 text-center text-sm mt-4">{error}</p>}
           <button
             type="submit"
-            className="w-full p-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition duration-300"
+            className="w-full bg-primary text-white py-3 rounded-lg font-bold text-lg hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg mt-6"
           >
             Register
           </button>
-          {error && <p className="text-red-500 text-center mt-2">{error}</p>}
         </form>
-        <p className="text-gray-400 text-center mt-4">
+        <p className="text-center text-text-dark text-md mt-4">
           Already have an account?{' '}
-          <Link to="/login" className="text-red-600 hover:underline">
+          <Link to="/login" className="text-primary hover:underline font-semibold">
             Login
           </Link>
         </p>

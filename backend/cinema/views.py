@@ -1,9 +1,10 @@
-from rest_framework import generics, status, views
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import generics, status, views, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Movie, Theater, Showtime, Booking
-from .serializers import MovieSerializer, TheaterSerializer, ShowtimeSerializer, BookingSerializer, UserSerializer
+from .models import Movie, Theater, Showtime, Booking, Payment
+from .serializers import MovieSerializer, TheaterSerializer, ShowtimeSerializer, BookingSerializer, UserSerializer, PaymentSerializer
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 import requests
@@ -14,7 +15,7 @@ from django.conf import settings
 import time
 import logging
 
-     # Set up logging
+# Set up logging
 logger = logging.getLogger(__name__)
 
 class MovieList(generics.ListAPIView):
@@ -36,7 +37,7 @@ class BookingListCreate(generics.ListCreateAPIView):
 
          def perform_create(self, serializer):
              try:
-                 serializer.save(user=self.request.user)
+                 booking = serializer.save(user=self.request.user)
              except Exception as e:
                  logger.error(f"Booking creation error: {str(e)}")
                  return Response(
@@ -74,6 +75,28 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
          def get_object(self):
              return self.request.user
+
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Payment.objects.all()
+        return Payment.objects.filter(booking__user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def approve(self, request, pk=None):
+        payment = self.get_object()
+        payment.is_approved = True
+        payment.save()
+        payment.booking.payment_status = 'COMPLETED'
+        payment.booking.save()
+        return Response({'status': 'payment approved'})
 
 class TelebirrPaymentView(APIView):
          permission_classes = [IsAuthenticated]
@@ -175,3 +198,14 @@ class ShowtimeBookedSeats(APIView):
              except Exception as e:
                  logger.error(f"Error fetching booked seats: {str(e)}", exc_info=True)
                  return Response({'error': f"Error fetching booked seats: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class MovieRecommendationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        watched_movies = Booking.objects.filter(user=user).values_list('showtime__movie', flat=True)
+        watched_genres = Movie.objects.filter(id__in=watched_movies).values_list('genre', flat=True).distinct()
+        recommendations = Movie.objects.filter(genre__in=watched_genres).exclude(id__in=watched_movies)[:10]
+        serializer = MovieSerializer(recommendations, many=True)
+        return Response(serializer.data)

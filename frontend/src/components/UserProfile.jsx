@@ -18,7 +18,7 @@ function UserProfile() {
     }
     const fetchProfile = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/users/me/', {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/me/`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
@@ -49,7 +49,7 @@ function UserProfile() {
     setError('');
     setSuccess('');
     try {
-      const response = await fetch('http://localhost:8000/api/users/me/', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/me/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -75,72 +75,79 @@ function UserProfile() {
     navigate('/');
   };
 
-  if (loading) return <div className="text-center p-4">Loading profile...</div>;
-  if (error && !profile) return <div className="text-center p-4 text-red-600">{error}</div>;
+  if (loading) return <div className="text-center p-6 text-text-light text-xl">Loading profile...</div>;
+  if (error && !profile) return <div className="text-center p-6 text-red-500 text-xl">{error}</div>;
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">User Profile</h2>
-      <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-        <h3 className="text-xl font-semibold">Account Details</h3>
-        <p><strong>Username:</strong> {profile?.username}</p>
-        <form onSubmit={handleSubmit} className="mt-4">
-          <div className="mb-4">
-            <label className="block text-gray-700">Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Phone:</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              placeholder="+251..."
-            />
-          </div>
+    <div className="bg-dark-1 min-h-screen text-text-light pt-16">
+      <div className="container mx-auto py-8 px-4">
+        <h1 className="text-4xl font-bold text-center text-primary mb-8">User Profile</h1>
+
+        <div className="bg-dark-2 rounded-xl shadow-2xl p-8 mb-8 border border-dark-3">
+          <h2 className="text-3xl font-bold text-text-light mb-6">Account Details</h2>
+          <p className="text-text-light text-lg mb-4"><strong>Username:</strong> {profile?.username}</p>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-text-light text-lg font-medium mb-2" htmlFor="email">Email:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-dark-3 border border-dark-3 text-text-light placeholder-text-dark focus:ring-2 focus:ring-primary focus:border-transparent transition duration-300"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-text-light text-lg font-medium mb-2" htmlFor="phone">Phone:</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-dark-3 border border-dark-3 text-text-light placeholder-text-dark focus:ring-2 focus:ring-primary focus:border-transparent transition duration-300"
+                placeholder="+251..."
+              />
+            </div>
+            {error && <p className="text-red-500 text-center text-sm mt-4">{error}</p>}
+            {success && <p className="text-green-500 text-center text-sm mt-4">{success}</p>}
+            <button
+              type="submit"
+              className="w-full bg-primary text-white py-3 rounded-lg font-bold text-lg hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg mt-6"
+            >
+              Update Profile
+            </button>
+          </form>
           <button
-            type="submit"
-            className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+            onClick={handleLogout}
+            className="w-full bg-gray-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-gray-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg mt-4"
           >
-            Update Profile
+            Logout
           </button>
-          {error && <p className="text-red-600 mt-2">{error}</p>}
-          {success && <p className="text-green-600 mt-2">{success}</p>}
-        </form>
-        <button
-          onClick={handleLogout}
-          className="mt-4 bg-red-600 text-white p-2 rounded hover:bg-red-700"
-        >
-          Logout
-        </button>
-      </div>
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <h3 className="text-xl font-semibold">Booking History</h3>
-        {profile?.bookings?.length === 0 ? (
-          <p>No bookings found.</p>
-        ) : (
-          <ul className="space-y-4">
-            {profile?.bookings?.map(booking => (
-              <li key={booking.id} className="border-b pb-2">
-                <p><strong>Movie:</strong> {booking.showtime.movie.title}</p>
-                <p><strong>Theater:</strong> {booking.showtime.theater.name}</p>
-                <p><strong>Showtime:</strong> {new Date(booking.showtime.date_time).toLocaleString()}</p>
-                <p><strong>Seats:</strong> {booking.seats}</p>
-                <p><strong>Tickets:</strong> {booking.num_tickets}</p>
-                <p><strong>Booked on:</strong> {new Date(booking.booking_time).toLocaleString()}</p>
-              </li>
-            ))}
-          </ul>
-        )}
+        </div>
+
+        <div className="bg-dark-2 rounded-xl shadow-2xl p-8 border border-dark-3">
+          <h2 className="text-3xl font-bold text-text-light mb-6">Booking History</h2>
+          {profile?.bookings?.length === 0 ? (
+            <p className="text-center text-text-dark text-lg py-4">No bookings found.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {profile?.bookings?.map(booking => (
+                <div key={booking.id} className="bg-dark-3 rounded-lg shadow-md p-5 border border-dark-2 transition duration-300 ease-in-out hover:shadow-lg">
+                  <p className="text-text-light text-lg mb-1"><strong>Movie:</strong> {booking.showtime.movie.title}</p>
+                  <p className="text-text-dark text-md mb-1"><strong>Theater:</strong> {booking.showtime.theater.name}</p>
+                  <p className="text-text-dark text-md mb-1"><strong>Showtime:</strong> {new Date(booking.showtime.date_time).toLocaleString()}</p>
+                  <p className="text-text-dark text-md mb-1"><strong>Seats:</strong> {booking.seats}</p>
+                  <p className="text-text-dark text-md mb-1"><strong>Tickets:</strong> {booking.num_tickets}</p>
+                  <p className="text-text-dark text-md"><strong>Booked on:</strong> {new Date(booking.booking_time).toLocaleString()}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

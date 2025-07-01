@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Movie, Theater, Showtime, Booking
+from .models import Movie, Theater, Showtime, Booking, Payment
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -21,15 +21,21 @@ class ShowtimeSerializer(serializers.ModelSerializer):
            model = Showtime
            fields = '__all__'
 
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = '__all__'
+
 class BookingSerializer(serializers.ModelSerializer):
        showtime = ShowtimeSerializer(read_only=True)
        showtime_id = serializers.PrimaryKeyRelatedField(
            queryset=Showtime.objects.all(), source='showtime', write_only=True
        )
+       payment = PaymentSerializer(read_only=True)
 
        class Meta:
            model = Booking
-           fields = ['id', 'showtime', 'showtime_id', 'num_tickets', 'booking_time', 'seats', 'payment_status', 'transaction_id']
+           fields = ['id', 'showtime', 'showtime_id', 'num_tickets', 'booking_time', 'seats', 'payment_status', 'transaction_id', 'payment']
 
        def validate(self, data):
            showtime = data.get('showtime')
@@ -68,7 +74,6 @@ class UserSerializer(serializers.ModelSerializer):
            fields = ['id', 'username', 'email', 'phone', 'password', 'bookings']
            extra_kwargs = {
                'password': {'write_only': True},
-               'username': {'read_only': True},
            }
 
        def create(self, validated_data):

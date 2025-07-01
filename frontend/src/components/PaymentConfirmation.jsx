@@ -7,17 +7,16 @@ function PaymentConfirmation() {
 
   useEffect(() => {
     // Simulate checking payment status (replace with API call)
-    setTimeout(() => {
-      // Placeholder: Check backend for booking payment_status
-      setStatus('Payment successful! Redirecting to bookings...');
-      setTimeout(() => navigate('/bookings'), 2000);
-    }, 2000);
+    // TODO: Implement actual API call to check payment status and navigate accordingly.
+    // For now, the status will remain 'Checking payment status...'
   }, [navigate]);
 
   return (
-    <div className="container mx-auto p-4 text-center">
-      <h2 className="text-2xl font-bold mb-4">Payment Confirmation</h2>
-      <p>{status}</p>
+    <div className="bg-dark-1 min-h-screen text-text-light pt-16 flex items-center justify-center">
+      <div className="w-full max-w-md bg-dark-2 rounded-xl shadow-2xl p-8 border border-dark-3 animate-fade-in text-center">
+        <h2 className="text-4xl font-bold text-primary mb-6">Payment Confirmation</h2>
+        <p className="text-lg text-text-light">{status}</p>
+      </div>
     </div>
   );
 }
