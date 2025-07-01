@@ -122,3 +122,6 @@ INFO 2025-07-01 16:00:30,472 basehttp 18440 15552 "GET /api/bookings/ HTTP/1.1" 
 INFO 2025-07-01 16:00:30,484 basehttp 18440 15552 "GET /api/bookings/ HTTP/1.1" 200 2579
 INFO 2025-07-01 16:00:33,419 basehttp 18440 15552 "GET /api/bookings/ HTTP/1.1" 200 2579
 INFO 2025-07-01 16:00:33,435 basehttp 18440 15552 "GET /api/bookings/ HTTP/1.1" 200 2579
+INFO 2025-07-01 16:20:12,290 autoreload 21264 4552 Watching for file changes with StatReloader
+INFO 2025-07-01 16:21:39,208 autoreload 18812 3816 Watching for file changes with StatReloader
+INFO 2025-07-01 16:22:07,243 basehttp 18812 6388 "GET /api/movies/ HTTP/1.1" 200 382

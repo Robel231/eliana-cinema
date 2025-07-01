@@ -14,14 +14,18 @@ import uuid
 from django.conf import settings
 import time
 import logging
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 # Set up logging
 logger = logging.getLogger(__name__)
 
+@method_decorator(cache_page(60*15), name='dispatch')
 class MovieList(generics.ListAPIView):
          queryset = Movie.objects.all()
          serializer_class = MovieSerializer
 
+@method_decorator(cache_page(60*15), name='dispatch')
 class MovieDetail(generics.RetrieveAPIView):
          queryset = Movie.objects.all()
          serializer_class = MovieSerializer
