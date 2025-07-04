@@ -125,3 +125,9 @@ INFO 2025-07-01 16:00:33,435 basehttp 18440 15552 "GET /api/bookings/ HTTP/1.1" 
 INFO 2025-07-01 16:20:12,290 autoreload 21264 4552 Watching for file changes with StatReloader
 INFO 2025-07-01 16:21:39,208 autoreload 18812 3816 Watching for file changes with StatReloader
 INFO 2025-07-01 16:22:07,243 basehttp 18812 6388 "GET /api/movies/ HTTP/1.1" 200 382
+INFO 2025-07-01 16:37:17,505 basehttp 18812 21824 "GET /api/movies/ HTTP/1.1" 200 382
+INFO 2025-07-01 16:37:42,027 basehttp 18812 21824 "OPTIONS /api/token/ HTTP/1.1" 200 0
+INFO 2025-07-01 16:37:42,343 basehttp 18812 21824 "POST /api/token/ HTTP/1.1" 200 483
+INFO 2025-07-01 16:37:48,431 basehttp 18812 21824 "GET /api/movies/1/ HTTP/1.1" 200 199
+INFO 2025-07-01 16:37:48,437 basehttp 18812 8504 "GET /api/showtimes/ HTTP/1.1" 200 628
+INFO 2025-07-01 16:37:48,446 basehttp 18812 8504 "GET /api/showtimes/ HTTP/1.1" 200 628
